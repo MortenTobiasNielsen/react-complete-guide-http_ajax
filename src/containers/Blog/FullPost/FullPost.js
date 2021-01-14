@@ -10,8 +10,22 @@ class FullPost extends Component {
 
     componentDidMount () {
         console.log(this.props)
+        this.loadData();       
+    }
+
+    // The router will not unmount and mount the component again,
+    // so we need to check for an update
+    componentDidUpdate () {
+        this.loadData();       
+    }
+
+    // Utility function to fetch data
+    loadData () {
         if (this.props.match.params.id) {
-            if ( !this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== this.props.match.params.id)) {
+            // this.props.match.params.id is a string,
+            // so there need to be a "+" before it to turn it into a number,
+            // so the type is the same as the loadedPosts
+            if ( !this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== +this.props.match.params.id)) {
                 axios.get("/posts/" + this.props.match.params.id)
                     .then(response => {
                         this.setState({loadedPost: response.data});
